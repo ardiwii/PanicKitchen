@@ -17,6 +17,9 @@ public class ClicktoSelect : MonoBehaviour {
 			Debug.Log ("click");
 			RaycastHit2D hitInfo = Physics2D.Raycast(new Vector2(camera.ScreenToWorldPoint(Input.mousePosition).x,camera.ScreenToWorldPoint(Input.mousePosition).y),Vector2.zero);
 			if(hitInfo!=null){
+				if(activeObject!=null){
+					activeObject.GetComponent<SpriteRenderer>().color = Color.white;
+				}
 				if((hitInfo.collider.gameObject.tag=="selectable"  || hitInfo.collider.gameObject.tag=="tools" || hitInfo.collider.gameObject.tag=="pisau") &&activeObject==null){
 					Debug.Log ("object clicked: " + hitInfo.collider.gameObject.name);
 					activeObject = hitInfo.collider.gameObject;
@@ -39,16 +42,25 @@ public class ClicktoSelect : MonoBehaviour {
 					}
 					else if(activeObject.tag=="selectable"){
 						Debug.Log (activeObject.name + " ke " + hitInfo.collider.gameObject.name);
-						hitInfo.collider.gameObject.GetComponent<ContainerScript>().PutItem(activeObject);
-						activeObject = null;
+						MovableScript movscr = activeObject.GetComponent<MovableScript>();
+						if(movscr!=null){
+							movscr.move(hitInfo.collider.gameObject);
+						}
+						else{
+							hitInfo.collider.gameObject.GetComponentInParent<ContainerScript>().PutItem(activeObject);
+						}
 					}
 					else{
 					}
 				}
 				else if(hitInfo.collider.gameObject.tag=="background"){
 					Debug.Log("background clicked");
+					if(activeObject!=null)
+					activeObject.GetComponent<SpriteRenderer>().color = Color.white;
 					activeObject = null;
 				}
+				if(activeObject!=null)
+				activeObject.GetComponent<SpriteRenderer>().color = Color.cyan;
 			}
 		}
 	}
