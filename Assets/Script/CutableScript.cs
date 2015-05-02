@@ -11,7 +11,7 @@ public class CutableScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		msscript = gameObject.GetComponent<MultiStateScript>();
+
 	}
 	
 	// Update is called once per frame
@@ -20,25 +20,32 @@ public class CutableScript : MonoBehaviour {
 	}
 
 	public bool cut(){
-		if(startcutstate==msscript.cur_state){
-			if(multicut){
+		msscript = gameObject.GetComponent<MultiStateScript>();
+		if(msscript){
+			if(startcutstate==msscript.cur_state){
 				if(startcutstate<endcutstate){
-					msscript.changeState(startcutstate+1);
-					startcutstate++;
+					if(multicut){
+						msscript.changeState(startcutstate+1);
+						startcutstate++;					
+					}
+					else{
+						msscript.changeState(endcutstate);
+					}
+					if(msscript.cur_state == endcutstate && !gameObject.name.Contains("sliced_")){
+						gameObject.name = "sliced_" + gameObject.name;
+					}
 				}
 				else{
-					//fail, penalty
 				}
+
+				//success
+				return true;
 			}
 			else{
-				msscript.changeState(endcutstate);
+				//fail, penalty
+				return false;
 			}
-			//success
-			return true;
 		}
-		else{
-			//fail, penalty
-			return false;
-		}
+		return false;
 	}
 }

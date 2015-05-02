@@ -10,7 +10,7 @@ public class CookableScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		msscript = gameObject.GetComponent<MultiStateScript>();
+
 	}
 	
 	// Update is called once per frame
@@ -19,14 +19,17 @@ public class CookableScript : MonoBehaviour {
 	}
 
 	public bool fry(){
-		iscooking = true;
-		if(startcookstate==msscript.cur_state){
-			msscript.changeState(endcookstate);
-			return true;
+		msscript = gameObject.GetComponent<MultiStateScript>();
+		if(msscript != null){
+			iscooking = true;
+			if(startcookstate==msscript.cur_state){
+				msscript.changeState(endcookstate);
+				if(msscript.cur_state == endcookstate && !gameObject.name.Contains("fried_")){
+					gameObject.name = "fried_" + gameObject.name;
+				}
+				return true;
+			}
 		}
-		else{
-			//fail, penalty
-			return false;
-		}
+		return false;
 	}
 }

@@ -17,15 +17,19 @@ public class MovableScript : MonoBehaviour {
 
 	public void move(GameObject targetContainer){
 		if(containedOn!=null){
+			Debug.Log("moving: "+ this.gameObject.name);
 			ContainerScript containscr = containedOn.GetComponent<ContainerScript>();
-			if(containscr!=null){
+			if(containscr!=null && this.gameObject.name.EndsWith("(Clone)")){
+				Debug.Log("disini");
 				containscr.containing = null;
+				containscr.isContaining = false;
 			}
 		}
-		ContainerScript containscr2 = targetContainer.GetComponentInParent<ContainerScript>();
+		ContainerScript containscr2 = targetContainer.GetComponent<ContainerScript>();
 		if(containscr2!=null){
 			containscr2.PutItem(this.gameObject);
 			containedOn = containscr2.gameObject;
+			//containscr2.isContaining = true;
 		}
 	}
 }

@@ -10,10 +10,12 @@ public class bowlFishChip : MonoBehaviour {
 	public Sprite diadonin_sprite;
 	int curstate;
 	public List<string> isi;
+	public bool readytoadon;
 	
 	// Use this for initialization
 	void Start () {
 		curstate = 1;
+		readytoadon = false;
 		isi = new List<string>();
 	}
 	
@@ -22,13 +24,23 @@ public class bowlFishChip : MonoBehaviour {
 		isBerubahState ();
 	}
 	
-	public void diadonin(){
+	public void prepareAdonan(){
 		curstate = 2;
 		this.gameObject.GetComponent<SpriteRenderer>().sprite = diadonin_sprite;
+		readytoadon = true;
 	}
 	
 	public void masukinBahan(GameObject bahan){
 		isi.Add(bahan.name);
+	}
+
+	public void diadon(GameObject bahan){
+		if(readytoadon){
+			AdonableScript adonscr =  bahan.GetComponent<AdonableScript>();
+			if(adonscr != null){
+				adonscr.adon();
+			}
+		}
 	}
 	
 	public void isBerubahState(){
@@ -46,7 +58,7 @@ public class bowlFishChip : MonoBehaviour {
 			}
 		}
 		if (adaTelur /*&& adaIkan*/ && adaTepung) {
-			diadonin ();
+			prepareAdonan();
 		}
 	}
 }

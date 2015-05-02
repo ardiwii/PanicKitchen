@@ -8,6 +8,7 @@ public class FryPanScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		readyToFry = false;
 		msscript = gameObject.GetComponent<MultiStateScript>();
 	}
 	
@@ -17,7 +18,10 @@ public class FryPanScript : MonoBehaviour {
 	}
 
 	public void diminyakin(){
-		readyToFry = true;
-		msscript.changeState(msscript.cur_state+1);
+		if(!readyToFry){
+			readyToFry = true;
+			msscript.changeState(msscript.cur_state+1);
+			gameObject.name = "oiled_" + gameObject.name;
+		}
 	}
 }
